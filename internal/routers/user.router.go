@@ -11,5 +11,7 @@ func UserRouter(router *gin.Engine) {
 		user.GET("all", h.GetAllUser)
 		user.POST("signup", h.UserSignup)
 		user.GET("signup", h.Signup)
+		user.GET("login", h.Login)
+		user.POST("login", h.UserLogin)
 	}
 }

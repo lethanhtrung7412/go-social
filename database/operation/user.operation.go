@@ -18,6 +18,16 @@ func FetchUser(users *[]e.UserEntity) error {
 	return nil
 }
 
+func FindOne(email string) (*e.UserEntity, error) {
+	user := &e.UserEntity{}
+	if err := DB.Model(&e.UserEntity{}).Where("email = ?",
+		email).First(user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
 func CreateNewUser(user *e.UserEntity) (uint, error) {
 	pass, err := common.HashPassword(user.Password)
 

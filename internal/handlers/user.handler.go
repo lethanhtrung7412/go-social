@@ -6,6 +6,7 @@ import (
 	e "go_social/database/entities"
 	db "go_social/database/operation"
 	"go_social/internal/common"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -17,6 +18,27 @@ func GetAllUser(c *gin.Context) {
 	common.RenderTemplate(c, "user", gin.H{
 		"users": users,
 	})
+}
+
+func Login(c *gin.Context) {
+	common.RenderTemplate(c, "login", gin.H{
+		"title": "login",
+	})
+}
+
+func UserLogin(c *gin.Context) {
+	email := strings.TrimSpace(c.PostForm("email"))
+	password := strings.TrimSpace(c.PostForm("password"))
+
+	user, err := db.FindOne(email)
+	common.Err(err, "Can't find user")
+	isCorrect := common.CheckPasswordHash(password, user.Password)
+	if !isCorrect {
+		log.Fatal("Password is not correct")
+	}
+
+	c.Redirect(http.StatusOK, "/")
+
 }
 
 func Signup(c *gin.Context) {
